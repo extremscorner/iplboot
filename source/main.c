@@ -193,18 +193,6 @@ int main()
 
     kprintf("\n\nIPLboot\n");
 
-    // Disable Qoob
-    u32 val = 6 << 24;
-    u32 addr = 0xC0000000;
-    EXI_Lock(EXI_CHANNEL_0, EXI_DEVICE_1, NULL);
-    EXI_Select(EXI_CHANNEL_0, EXI_DEVICE_1, EXI_SPEED8MHZ);
-    EXI_Imm(EXI_CHANNEL_0, &addr, 4, EXI_WRITE, NULL);
-    EXI_Sync(EXI_CHANNEL_0);
-    EXI_Imm(EXI_CHANNEL_0, &val, 4, EXI_WRITE, NULL);
-    EXI_Sync(EXI_CHANNEL_0);
-    EXI_Deselect(EXI_CHANNEL_0);
-    EXI_Unlock(EXI_CHANNEL_0);
-
     // Set the timebase properly for games
     // Note: fuck libogc and dkppc
     u32 t = ticks_to_secs(SYS_Time());
@@ -227,6 +215,5 @@ load:
     }
 
     // If we reach here, all attempts to load a DOL failed
-    // Since we've disabled the Qoob, we wil reboot to the Nintendo IPL
     return 0;
 }
