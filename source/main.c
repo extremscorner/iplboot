@@ -210,15 +210,15 @@ int main()
     u32 t = ticks_to_secs(SYS_Time());
     settime(secs_to_ticks(t));
 
-    if (load_usb('B')) goto load;
+    if (load_fat("sda", &__io_gcsda)) goto load;
 
     if (load_fat("sdb", &__io_gcsdb)) goto load;
 
+    if (load_fat("sd2", &__io_gcsd2)) goto load;
+
     if (load_usb('A')) goto load;
 
-    if (load_fat("sda", &__io_gcsda)) goto load;
-
-    if (load_fat("sd2", &__io_gcsd2)) goto load;
+    if (load_usb('B')) goto load;
 
 load:
     if (dol)
