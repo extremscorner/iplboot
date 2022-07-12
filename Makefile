@@ -7,11 +7,7 @@ ifeq ($(strip $(DEVKITPPC)),)
 $(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC")
 endif
 
-include $(DEVKITPPC)/gamecube_rules
-
-export CC := powerpc-eabi-clang
-MACHDEP =  -DGEKKO -mcpu=750 \
-	   -D__gamecube__ -DHW_DOL -ffunction-sections -fdata-sections
+include $(DEVKITPRO)/libogc2/gamecube_rules
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
@@ -23,7 +19,7 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source/ source/fatfs/
 DATA		:=	data  
-INCLUDES	:=	-nostdlibinc -isystem $(DEVKITPPC)/powerpc-eabi/include
+INCLUDES	:=
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -74,12 +70,7 @@ BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
 ifeq ($(strip $(CPPFILES)),)
-	export LD	:=	$(CC) -Wl,--gc-sections -nostartfiles \
-		$(DEVKITPPC)/lib/gcc/powerpc-eabi/*/crtend.o \
-		$(DEVKITPPC)/lib/gcc/powerpc-eabi/*/ecrtn.o \
-		$(DEVKITPPC)/lib/gcc/powerpc-eabi/*/ecrti.o \
-		$(DEVKITPPC)/lib/gcc/powerpc-eabi/*/crtbegin.o \
-		$(DEVKITPPC)/powerpc-eabi/lib/crtmain.o
+	export LD	:=	$(CC)
 else
 	export LD	:=	$(CXX)
 endif
